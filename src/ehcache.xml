@@ -1,0 +1,9 @@
+<ehcache>
+	<diskStore path="C:\cache" />
+	<defaultCache maxElementsInMemory="1000" eternal="false"
+		overflowToDisk="true" timeToIdleSeconds="120" timeToLiveSeconds="180"
+		diskPersistent="false" diskExpiryThreadIntervalSeconds="60" />
+	<cache name="com.assist.platform.model.User" maxElementsInMemory="100"
+		eternal="false" overflowToDisk="true" timeToIdleSeconds="300"
+		timeToLiveSeconds="600" diskPersistent="false" />
+</ehcache>

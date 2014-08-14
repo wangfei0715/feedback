@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+	<constant name="struts.action.extension" value="action,do,adp" />
+	<constant name="struts.serve.static.browserCache" value="false" />
+	<constant name="struts.configuration.xml.reload" value="true" />
+	<constant name="struts.devMode" value="true" />
+	<constant name="struts.ui.theme" value="simple" />
+	<constant name="struts.objectFactory" value="spring" />
+	<constant name="struts.custom.i18n.resources"
+		value="globalMessages" />
+	<constant name="struts.i18n.encoding" value="UTF-8" />
+	<constant name="struts.multipart.maxSize" value="52428800" />
+
+	<package name="platform" namespace="/" extends="struts-default">
+		<action name="*" class="loginAction" method="{1}">
+			<result name="login">/index.jsp</result>
+			<result name="logout">/page/login.jsp</result>
+			<result name="loginerror">/page/login.jsp</result>
+			<result name="xml" type="xslt">
+				<param name="exposedValue">xmlDoc</param>
+			</result>
+		</action>
+	</package>
+
+	<package name="manager" namespace="/manager"
+		extends="struts-default">
+		<interceptors>
+			<interceptor-stack name="authorityStack">
+				<interceptor-ref name="defaultStack"></interceptor-ref>
+				<interceptor-ref name="authority"></interceptor-ref>
+<!--				<interceptor-ref name="funcauthority"></interceptor-ref>-->
+			</interceptor-stack>
+			<interceptor name="authority"
+				class="com.assist.platform.web.interceptor.LoginAuthorityInterceptor" />
+			<interceptor name="funcauthority"
+				class="com.assist.platform.web.interceptor.FunctionAuthorityInterceptor" />
+		</interceptors>
+
+		<global-results>
+			<result name="notlogin" type="redirect">
+				/page/tip/notlogin.jsp
+			</result>
+			<result name="notauth" type="redirect">
+				/page/tip/notauth.jsp
+			</result>
+		</global-results>
+
+		<action name="ajax_*" class="userAction" method="{1}">
+			<result name="xmlstr" type="xslt">
+				<param name="exposedValue">message</param>
+			</result>
+			<result name="xml" type="xslt">
+				<param name="exposedValue">xmlDoc</param>
+			</result>
+		</action>
+		<action name="my_*" class="userAction" method="{1}">
+			<result name="xml" type="xslt">
+				<param name="exposedValue">xmlDoc</param>
+			</result>
+			<result name="viewInfo">/page/user/userinfo.jsp</result>
+			<result name="editSelf">/page/user/editself.jsp</result>
+			<interceptor-ref name="authorityStack"></interceptor-ref>
+		</action>
+		<action name="user_*" class="userAction" method="{1}">
+			<result name="xml" type="xslt">
+				<param name="exposedValue">xmlDoc</param>
+			</result>
+			<result name="getUserList">/user/userlist.jsp</result>
+			<result name="add">/user/useradd.jsp</result>
+			<result name="save" type="redirectAction">
+				manager/user_getUserList.action
+			</result>
+			<result name="delete" type="redirectAction">
+				manager/user_getUserList.action
+			</result>
+			<result name="edit">/user/useredit.jsp</result>
+			<result name="update" type="redirectAction">
+				manager/user_getUserList.action
+			</result>
+			
+			<result name="beforeSearch">/page/user/usersearch.jsp</result>
+			<result name="search">/page/user/userlist.jsp</result>
+			<interceptor-ref name="authorityStack"></interceptor-ref>
+		</action>
+		<action name="group_*" class="groupAction" method="{1}">
+			<result name="getGroupList">/group/grouplist.jsp</result>
+			<result name="add">/group/groupadd.jsp</result>
+			<result name="save" type="redirectAction">
+				manager/group_getGroupList.action
+			</result>
+			<result name="delete" type="redirectAction">
+				manager/group_getGroupList.action
+			</result>
+			<result name="edit">/group/groupedit.jsp</result>
+			<result name="update" type="redirectAction">
+				manager/group_getGroupList.action
+			</result>
+			<interceptor-ref name="authorityStack"></interceptor-ref>
+		</action>
+		<action name="role_*" class="roleAction" method="{1}">
+			<result name="getRoleList">/role/rolelist.jsp</result>
+			<result name="add">/role/roleadd.jsp</result>
+			<result name="save" type="redirectAction">
+				manager/role_getRoleList.action
+			</result>
+			<result name="delete" type="redirectAction">
+				manager/role_getRoleList.action
+			</result>
+			<result name="edit">/role/roleedit.jsp</result>
+			<result name="update" type="redirectAction">
+				manager/role_getRoleList.action
+			</result>
+			
+			<interceptor-ref name="authorityStack"></interceptor-ref>
+		</action>
+		<action name="func_*" class="funcAction" method="{1}">
+			<result name="getFuncList">/func/funclist.jsp</result>
+			<result name="add">/func/funcadd.jsp</result>
+			<result name="save" type="redirectAction">
+				manager/func_getFuncList.action
+			</result>
+			<result name="delete" type="redirectAction">
+				manager/func_getFuncList.action
+			</result>
+			<result name="edit">/func/funcedit.jsp</result>
+			<result name="update" type="redirectAction">
+				manager/func_getFuncList.action
+			</result>
+			
+			<interceptor-ref name="authorityStack"></interceptor-ref>
+		</action>
+		<action name="module_*" class="moduleAction" method="{1}">
+			<result name="getModuleList">/module/modulelist.jsp</result>
+			<result name="add">/module/moduleadd.jsp</result>
+			<result name="save" type="redirectAction">
+				manager/module_getModuleList.action
+			</result>
+			<result name="delete" type="redirectAction">
+				manager/module_getModuleList.action
+			</result>
+			<result name="edit">/module/moduleedit.jsp</result>
+			<result name="update" type="redirectAction">
+				manager/module_getModuleList.action
+			</result>
+			
+			<interceptor-ref name="authorityStack"></interceptor-ref>
+		</action>
+		<action name="log_*" class="logAction" method="{1}">
+			<result name="getLogList">/log/loglist.jsp</result>
+			<result name="delete" type="redirectAction">
+				manager/log_getLogList.action
+			</result>
+			<interceptor-ref name="authorityStack"></interceptor-ref>
+		</action>
+		<action name="transferuser_*" class="userTransferAction" method="{1}">
+			<result name="transferuser">/user/usertransfer.jsp</result>
+			<result name="save">/user/transfersuccess.jsp</result>
+			<result name="saveerror">/user/transfererror.jsp</result>
+			<interceptor-ref name="authorityStack"></interceptor-ref>
+		</action>
+	</package>
+
+	<package name="common" namespace="/common"
+		extends="struts-default">
+		<interceptors>
+			<interceptor-stack name="authorityStack">
+				<interceptor-ref name="defaultStack"></interceptor-ref>
+				<interceptor-ref name="authority"></interceptor-ref>
+<!--				<interceptor-ref name="funcauthority"></interceptor-ref>-->
+			</interceptor-stack>
+			<interceptor name="authority"
+				class="com.assist.platform.web.interceptor.LoginAuthorityInterceptor" />
+			<interceptor name="funcauthority"
+				class="com.assist.platform.web.interceptor.FunctionAuthorityInterceptor" />
+		</interceptors>
+
+		<global-results>
+			<result name="notlogin" type="redirect">
+				/page/tip/notlogin.jsp
+			</result>
+			<result name="notauth" type="redirect">
+				/page/tip/notauth.jsp
+			</result>
+		</global-results>
+		
+		<action name="redirect_*" class="redirectAction"
+			method="{1}">
+			<result name="question">/page/advice.jsp</result>
+			<result name="suggestion">/page/advice.jsp</result>
+			<result name="myquestions">/page/advice.jsp</result>
+			<result name="commquestions">/page/advice.jsp</result>
+			<result name="greatquestions">/page/advice.jsp</result>
+			<interceptor-ref name="authorityStack"></interceptor-ref>
+		</action>
+	</package>
+	
+	<package name="message" namespace="/message"
+		extends="struts-default">
+		<interceptors>
+			<interceptor-stack name="authorityStack">
+				<interceptor-ref name="defaultStack"></interceptor-ref>
+				<interceptor-ref name="authority"></interceptor-ref>
+<!--				<interceptor-ref name="funcauthority"></interceptor-ref>-->
+			</interceptor-stack>
+			<interceptor name="authority"
+				class="com.assist.platform.web.interceptor.LoginAuthorityInterceptor" />
+			<interceptor name="funcauthority"
+				class="com.assist.platform.web.interceptor.FunctionAuthorityInterceptor" />
+		</interceptors>
+
+		<global-results>
+			<result name="notlogin" type="redirect">
+				/page/tip/notlogin.jsp
+			</result>
+			<result name="notauth" type="redirect">
+				/page/tip/notauth.jsp
+			</result>
+		</global-results>
+		
+		<action name="message_*" class="messageAction"
+			method="{1}">
+			<result name="xml" type="xslt">
+				<param name="exposedValue">xmlDoc</param>
+			</result>
+			<result name="save">/page/tip/result.jsp</result>
+			<result name="myquestions">/page/advice.jsp</result>
+			<result name="commquestions">/page/advice.jsp</result>
+			<result name="greatquestions">/page/advice.jsp</result>
+			<result name="detail">/page/advice.jsp</result>
+			<result name="questionadmin">/page/advice.jsp</result>
+			<result name="admindetail">/page/advice.jsp</result>
+			<result name="error" type="redirectAction">
+				message/message_commquestions.action
+			</result>
+			<result name="adminerror" type="redirectAction">
+				message/message_questionadmin.action?myQuestionType=0
+			</result>
+			<interceptor-ref name="authorityStack"></interceptor-ref>
+		</action>
+		<!-- 若返回值中用Document xmlDoc，需要在方法中加入 response.setContentType("text/xml;charset=UTF-8"); response.setHeader("Cache-Control", "no-cache"); -->
+		<action name="ajax_*" class="messageAction" method="{1}">
+			<result name="xml" type="xslt">
+				<param name="exposedValue">xmlDoc</param>
+			</result>
+		</action>
+	</package>
+	
+
+</struts>

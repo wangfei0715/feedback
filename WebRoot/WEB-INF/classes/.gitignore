@@ -1,0 +1,10 @@
+/applicationContext.xml
+/com/
+/config.properties
+/db.properties
+/ehcache.xml
+/globalMessages.properties
+/globalMessages_zh_CN.properties
+/log4j.properties
+/struts.xml
+/test/
